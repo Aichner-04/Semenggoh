@@ -11,28 +11,29 @@ $dbname = "e_office";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Check if 'id' is set in the URL
 if (isset($_GET['id'])) {
     $guide_id = $_GET['id'];
+
+    // Prepare a parameterized query
+    $stmt = $conn->prepare("SELECT * FROM park_guides WHERE id = ?");
+    $stmt->bind_param("i", $guide_id); // 'i' stands for integer
+    $stmt->execute();
     
-    // Fetch current guide details from the database
-    $query = "SELECT * FROM park_guides WHERE id = $guide_id";
-    $result = $conn->query($query);
-    
+    $result = $stmt->get_result();
+
     if ($result->num_rows > 0) {
         $guide = $result->fetch_assoc();
     } else {
         echo "No guide found.";
         exit;
     }
+
+    $stmt->close();
 } else {
     echo "Guide ID not provided.";
     exit;
 }
+
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
