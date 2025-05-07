@@ -9,7 +9,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check for connection errors
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error); hi
+    die("Connection failed: " . $conn->connect_error); 
 }
 
 // Get the certificate ID from the URL
